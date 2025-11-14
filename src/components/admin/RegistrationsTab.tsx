@@ -30,6 +30,7 @@ interface Registration {
   category_id: string;
   preference_category_id?: string;
   panchayath_id?: string;
+  program_id?: string;
   categories: {
     name_english: string;
     name_malayalam: string;
@@ -41,6 +42,10 @@ interface Registration {
   panchayaths?: {
     name: string;
     district: string;
+  };
+  programs?: {
+    name: string;
+    description: string;
   };
   registration_verifications?: {
     verified: boolean;
@@ -79,6 +84,7 @@ const RegistrationsTab = () => {
           categories!registrations_category_id_fkey (name_english, name_malayalam),
           preference_categories:categories!registrations_preference_category_id_fkey (name_english, name_malayalam),
           panchayaths (name, district),
+          programs (name, description),
           registration_verifications!registration_verifications_registration_id_fkey (verified, verified_by, verified_at)
         `)
         .order('created_at', { ascending: false });
@@ -759,9 +765,10 @@ const RegistrationsTab = () => {
                       <TableHead className="min-w-[150px]">Name</TableHead>
                       <TableHead className="min-w-[120px]">Mobile</TableHead>
                       <TableHead className="min-w-[100px]">Ward</TableHead>
-                      <TableHead className="min-w-[200px]">Address</TableHead>
+                      <TableHead className="min-w-[120px]">Address</TableHead>
                       <TableHead className="min-w-[120px]">Panchayath</TableHead>
                       <TableHead className="min-w-[180px]">Category</TableHead>
+                      <TableHead className="min-w-[150px]">Selected Job</TableHead>
                       <TableHead className="min-w-[100px]">Status</TableHead>
                       <TableHead className="min-w-[80px]">Fee</TableHead>
                       <TableHead className="min-w-[140px]">Important Dates</TableHead>
@@ -792,7 +799,7 @@ const RegistrationsTab = () => {
                               <div className="text-sm truncate">{reg.ward || 'N/A'}</div>
                             </TableCell>
                             <TableCell className="p-2">
-                              <div className="text-sm truncate" title={reg.address}>{reg.address}</div>
+                              <div className="text-sm truncate max-w-[120px]" title={reg.address}>{reg.address}</div>
                             </TableCell>
                             <TableCell className="p-2">
                               <div className="text-sm truncate">
@@ -815,6 +822,11 @@ const RegistrationsTab = () => {
                                   <div className={categoryColor.text}>{reg.preference_categories.name_english}</div>
                                 </div>
                               )}
+                            </div>
+                          </TableCell>
+                          <TableCell className="p-2">
+                            <div className="text-sm truncate max-w-[150px]" title={reg.programs?.name}>
+                              {reg.programs?.name || 'N/A'}
                             </div>
                           </TableCell>
                            <TableCell>

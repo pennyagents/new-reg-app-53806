@@ -68,6 +68,14 @@ const Categories = () => {
   const handleRegisterClick = async (category: Category) => {
     setSelectedCategory(category);
     setSelectedProgram(null);
+    
+    // For Pennyekart Free Registration, open form directly without job selection
+    if (category.name_english.toLowerCase().includes('pennyekart free')) {
+      setShowRegistrationForm(true);
+      return;
+    }
+    
+    // For other categories, show job selection first
     const { data } = await supabase
       .from('programs')
       .select('*')

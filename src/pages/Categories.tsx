@@ -65,10 +65,20 @@ const Categories = () => {
     if (data) setCategories(data);
   };
 
-  const handleRegisterClick = (category: Category) => {
+  const handleRegisterClick = async (category: Category) => {
     setSelectedCategory(category);
     setSelectedProgram(null);
-    setShowRegistrationForm(true);
+    const { data } = await supabase
+      .from('programs')
+      .select('*')
+      .eq('category_id', category.id)
+      .order('is_top', { ascending: false })
+      .order('priority', { ascending: false });
+    
+    if (data) {
+      setPrograms(data);
+      setShowProgramDialog(true);
+    }
   };
 
   const handleSelectJobClick = async (category: Category) => {
